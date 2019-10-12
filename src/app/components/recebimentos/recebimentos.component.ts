@@ -1,3 +1,4 @@
+import { NgForm } from "@angular/forms";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Conta } from "./../../models/conta";
 import { Component, OnInit } from "@angular/core";
@@ -10,9 +11,17 @@ import { Component, OnInit } from "@angular/core";
 export class RecebimentosComponent implements OnInit {
   recebimentos: Conta[];
   valorTotal = 0;
-  constructor(private loopService: LoopserviceService) {}
+  receb: Conta;
+  aviso: string;
+  constructor(private loopService: LoopserviceService) {
+    this.receb = new Conta();
+  }
 
   ngOnInit() {
+    this.loadDados();
+  }
+
+  private loadDados() {
     this.loopService.getRecebimentos().subscribe(res => {
       const rees = Object.keys(res);
       for (const recebimento of rees) {
@@ -27,7 +36,13 @@ export class RecebimentosComponent implements OnInit {
           this.recebimentos.push(conta);
         }
       }
-      console.log(this.recebimentos);
+    });
+  }
+
+  onSubmit(form: NgForm) {
+    this.loopService.postRecebimento(form.value).subscribe(res => {
+      this.aviso = "Recebimento cadastrado com sucesso!";
+      this.loadDados();
     });
   }
 }

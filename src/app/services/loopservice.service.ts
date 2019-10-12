@@ -47,4 +47,13 @@ export class LoopserviceService {
   getRecebimentos(): Observable<{}> {
     return this.http.get("http://localhost:3000/api/recebimentos");
   }
+  postRecebimento(recebimento: Conta): Observable<any> {
+    return this.http.post(
+      "http://localhost:3000/api/recebimentos",
+      recebimento,
+      {
+        headers: this.headerDefault
+      }
+    );
+  }
 }
