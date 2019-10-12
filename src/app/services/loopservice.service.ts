@@ -1,3 +1,4 @@
+import { Conta } from "./../models/conta";
 import { Usuario } from "./../models/usuario";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -41,5 +42,9 @@ export class LoopserviceService {
       );
     }
     return null;
+  }
+
+  getRecebimentos(): Observable<{}> {
+    return this.http.get("http://localhost:3000/api/recebimentos");
   }
 }

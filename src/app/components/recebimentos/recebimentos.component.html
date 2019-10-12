@@ -1,1 +1,11 @@
-<p>recebimentos works!</p>
+<h1>Recebimentos</h1>
+<div *ngIf="recebimentos">
+  <div *ngFor="let item of recebimentos">
+    <div>Nome: {{ item.nome }}</div>
+    <div>Valor: {{ item.valor }}</div>
+  </div>
+  <div>Valor total: {{ valorTotal }}</div>
+</div>
+<div *ngIf="!recebimentos">
+  <h1>Nenhum recebimento cadastrado</h1>
+</div>
