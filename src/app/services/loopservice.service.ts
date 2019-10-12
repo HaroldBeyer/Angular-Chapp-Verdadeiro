@@ -8,7 +8,12 @@ import { Observable } from "rxjs";
 })
 export class LoopserviceService {
   readonly URL = "http://localhost:3000/api";
-  constructor(private http: HttpClient) {}
+  headerDefault: HttpHeaders;
+  constructor(private http: HttpClient) {
+    this.headerDefault = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+  }
 
   criarUsuario(usuario: Usuario): Observable<any> {
     if (usuario && usuario.email && usuario.senha) {
@@ -18,10 +23,22 @@ export class LoopserviceService {
       };
       //URL + "/Users"
       return this.http.post("http://localhost:3000/api/Users", json, {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json"
-        })
+        headers: this.headerDefault
       });
+    }
+    return null;
+  }
+
+  login(usuario: Usuario): Observable<any> {
+    if (usuario && usuario.email && usuario.senha) {
+      return this.http.post(
+        this.URL + "/Users/login",
+        {
+          email: usuario.email,
+          password: usuario.senha
+        },
+        { headers: this.headerDefault }
+      );
     }
     return null;
   }

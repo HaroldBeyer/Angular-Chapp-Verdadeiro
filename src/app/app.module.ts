@@ -9,6 +9,7 @@ import { CriarcontaComponent } from "./components/criarconta/criarconta.componen
 import { RecebimentosComponent } from "./components/recebimentos/recebimentos.component";
 import { PagamentosComponent } from "./components/pagamentos/pagamentos.component";
 import { FormsModule } from "@angular/forms";
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule } from "@angular/forms";
     LoginComponent,
     CriarcontaComponent,
     RecebimentosComponent,
-    PagamentosComponent
+    PagamentosComponent,
+    HomeComponent
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [LoopserviceService],
