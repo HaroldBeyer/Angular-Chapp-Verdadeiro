@@ -1,3 +1,7 @@
+<h1 *ngIf="aviso">
+  {{ aviso }}
+</h1>
+
 <h1 class="display-4">Criar usuário</h1>
 <form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
   <div class="form-group">

@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Usuario } from "./../../models/usuario";
 import { Component, OnInit } from "@angular/core";
@@ -10,6 +11,7 @@ import { NgForm } from "@angular/forms";
 })
 export class CriarcontaComponent implements OnInit {
   usuario: Usuario;
+  aviso: string;
   constructor(private loopService: LoopserviceService) {}
 
   ngOnInit() {
@@ -17,6 +19,15 @@ export class CriarcontaComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
+    this.loopService
+      .criarUsuario(form.value)
+      .toPromise()
+      .then(res => {
+        this.aviso = "Usuário cadastrado com sucesso!";
+        console.log("Usuário criado com sucesso!");
+      })
+      .catch(err => {
+        this.aviso = "Erro ao tentar cadastrar usuário" + err;
+      });
   }
 }
