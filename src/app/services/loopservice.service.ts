@@ -56,4 +56,15 @@ export class LoopserviceService {
       }
     );
   }
+  deleteRecebimento(id: String): Observable<{}> {
+    return this.http.delete(
+      "http://localhost:3000/api/recebimentos" + "/" + id
+    );
+  }
+  editRecebimento(recebimento: Conta): Observable<any> {
+    return this.http.put(
+      "http://localhost:3000/api/recebimentos" + "/" + recebimento.id,
+      recebimento
+    );
+  }
 }

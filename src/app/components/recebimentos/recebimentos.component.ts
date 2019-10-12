@@ -13,8 +13,9 @@ export class RecebimentosComponent implements OnInit {
   valorTotal = 0;
   receb: Conta;
   aviso: string;
+  edit: string;
   constructor(private loopService: LoopserviceService) {
-    this.receb = new Conta();
+    this.receb = new Conta(null);
   }
 
   ngOnInit() {
@@ -22,13 +23,17 @@ export class RecebimentosComponent implements OnInit {
   }
 
   private loadDados() {
+    if (this.recebimentos) {
+      this.recebimentos = null;
+    }
     this.loopService.getRecebimentos().subscribe(res => {
       const rees = Object.keys(res);
       for (const recebimento of rees) {
         this.valorTotal += res[recebimento]["valor"];
         const conta: Conta = {
           nome: res[recebimento]["nome"],
-          valor: res[recebimento]["valor"]
+          valor: res[recebimento]["valor"],
+          id: res[recebimento]["id"]
         };
         if (!this.recebimentos) {
           this.recebimentos = [conta];
@@ -42,6 +47,24 @@ export class RecebimentosComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.loopService.postRecebimento(form.value).subscribe(res => {
       this.aviso = "Recebimento cadastrado com sucesso!";
+      this.loadDados();
+    });
+  }
+  deletar(id: String) {
+    this.loopService.deleteRecebimento(id).subscribe(res => {
+      this.aviso = "Recebimento removido com sucesso!";
+      this.loadDados();
+    });
+  }
+  editar(id: string) {
+    this.edit = id;
+  }
+  onEditSubmit(form: NgForm) {
+    const rec = new Conta(form.value);
+    rec.id = this.edit;
+    this.loopService.editRecebimento(rec).subscribe(res => {
+      this.aviso = "Item " + rec.nome + " editado com sucesso!";
+      this.edit = null;
       this.loadDados();
     });
   }

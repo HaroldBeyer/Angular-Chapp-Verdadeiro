@@ -21,7 +21,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.loopService.login(form.value).subscribe(res => {
-      console.log("Olha aí Haroldo: " + res);
+      const oxx = Object.keys(res);
+      for (const o of oxx) {
+        console.log(o + " " + res[o]);
+      }
       this.router.navigateByUrl("/pagamentos");
     });
     console.log(form.value);
