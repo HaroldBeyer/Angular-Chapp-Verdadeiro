@@ -8,8 +8,9 @@ import { Observable } from "rxjs";
   providedIn: "root"
 })
 export class LoopserviceService {
-  readonly URL = "http://localhost:3000/api";
+  readonly URL = `http://localhost:3000/api`;
   headerDefault: HttpHeaders;
+  accessToken = localStorage.getItem("accessToken");
   constructor(private http: HttpClient) {
     this.headerDefault = new HttpHeaders({
       "Content-Type": "application/json"
@@ -33,7 +34,7 @@ export class LoopserviceService {
   login(usuario: Usuario): Observable<any> {
     if (usuario && usuario.email && usuario.senha) {
       return this.http.post(
-        this.URL + "/Users/login",
+        this.URL + "/Users/login?include=user",
         {
           email: usuario.email,
           password: usuario.senha
@@ -45,11 +46,13 @@ export class LoopserviceService {
   }
 
   getRecebimentos(): Observable<{}> {
-    return this.http.get("http://localhost:3000/api/recebimentos");
+    return this.http.get(
+      `http://localhost:3000/api/recebimentos?access_token=${this.accessToken}`
+    );
   }
   postRecebimento(recebimento: Conta): Observable<any> {
     return this.http.post(
-      "http://localhost:3000/api/recebimentos",
+      `http://localhost:3000/api/recebimentos?access_token=${this.accessToken}`,
       recebimento,
       {
         headers: this.headerDefault
@@ -58,30 +61,56 @@ export class LoopserviceService {
   }
   deleteRecebimento(id: String): Observable<{}> {
     return this.http.delete(
-      "http://localhost:3000/api/recebimentos" + "/" + id
+      `http://localhost:3000/api/recebimentos` +
+        `/` +
+        id +
+        `?access_token=${this.accessToken}`
     );
   }
   editRecebimento(recebimento: Conta): Observable<any> {
     return this.http.put(
-      "http://localhost:3000/api/recebimentos" + "/" + recebimento.id,
+      `http://localhost:3000/api/recebimentos` +
+        `/` +
+        recebimento.id +
+        `?access_token=${this.accessToken}`,
       recebimento
     );
   }
   getPagamentos(): Observable<{}> {
-    return this.http.get("http://localhost:3000/api/pagamentos");
+    return this.http.get(
+      `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`
+    );
   }
   postPagamento(pagamento: Conta): Observable<any> {
-    return this.http.post("http://localhost:3000/api/pagamentos", pagamento, {
-      headers: this.headerDefault
-    });
+    return this.http.post(
+      `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`,
+      pagamento,
+      {
+        headers: this.headerDefault
+      }
+    );
   }
   deletePagamento(id: String): Observable<{}> {
-    return this.http.delete("http://localhost:3000/api/pagamentos" + "/" + id);
+    return this.http.delete(
+      `http://localhost:3000/api/pagamentos` +
+        "/" +
+        id +
+        `?access_token=${this.accessToken}`
+    );
   }
   editPagamento(pagamento: Conta): Observable<any> {
     return this.http.put(
-      "http://localhost:3000/api/pagamentos" + "/" + pagamento.id,
+      `http://localhost:3000/api/pagamentos` +
+        "/" +
+        pagamento.id +
+        `?access_token=${this.accessToken}`,
       pagamento
     );
+  }
+  logoutUser() {
+    const url_api = `http://localhost:3000/api/Users/logout?access_token=${this.accessToken}`;
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("currentUser");
+    return this.http.post<Usuario>(url_api, { headers: this.headerDefault });
   }
 }

@@ -1,3 +1,5 @@
+import { Router } from "@angular/router";
+import { AuthService } from "./../../services/auth.service";
 import { NgForm } from "@angular/forms";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Conta } from "./../../models/conta";
@@ -15,8 +17,19 @@ export class PagamentosComponent implements OnInit {
   pagam: Conta;
   valorTotal = 0;
 
-  constructor(private loopService: LoopserviceService) {
+  constructor(
+    private loopService: LoopserviceService,
+    private authService: AuthService,
+    private route: Router
+  ) {
     this.pagam = new Conta(null);
+    const current = this.authService.getCurrentUser();
+    console.log("Current: " + current);
+    if (!current) {
+      alert("Usuário não logado!");
+      route.navigateByUrl("/");
+      console.warn("Usuário não logado");
+    }
   }
 
   ngOnInit() {
@@ -67,5 +80,9 @@ export class PagamentosComponent implements OnInit {
       this.edit = null;
       this.loadDados();
     });
+  }
+  logout() {
+    this.loopService.logoutUser();
+    this.route.navigateByUrl("/");
   }
 }

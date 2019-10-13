@@ -1,3 +1,5 @@
+import { Router } from "@angular/router";
+import { AuthService } from "./../../services/auth.service";
 import { NgForm } from "@angular/forms";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Conta } from "./../../models/conta";
@@ -14,8 +16,19 @@ export class RecebimentosComponent implements OnInit {
   receb: Conta;
   aviso: string;
   edit: string;
-  constructor(private loopService: LoopserviceService) {
+  constructor(
+    private loopService: LoopserviceService,
+    private authService: AuthService,
+    private route: Router
+  ) {
     this.receb = new Conta(null);
+    const current = this.authService.getCurrentUser();
+    console.log("Current: " + current);
+    if (!current) {
+      alert("Usuário não logado!");
+      route.navigateByUrl("/");
+      console.warn("Usuário não logado");
+    }
   }
 
   ngOnInit() {
@@ -68,5 +81,9 @@ export class RecebimentosComponent implements OnInit {
       this.edit = null;
       this.loadDados();
     });
+  }
+  logout() {
+    this.loopService.logoutUser();
+    this.route.navigateByUrl("/");
   }
 }
