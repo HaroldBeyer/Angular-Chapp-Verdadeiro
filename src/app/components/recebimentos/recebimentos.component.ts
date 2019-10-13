@@ -1,3 +1,5 @@
+import { Router } from "@angular/router";
+import { AuthService } from "./../../services/auth.service";
 import { NgForm } from "@angular/forms";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Conta } from "./../../models/conta";
@@ -13,8 +15,20 @@ export class RecebimentosComponent implements OnInit {
   valorTotal = 0;
   receb: Conta;
   aviso: string;
-  constructor(private loopService: LoopserviceService) {
-    this.receb = new Conta();
+  edit: string;
+  constructor(
+    private loopService: LoopserviceService,
+    private authService: AuthService,
+    private route: Router
+  ) {
+    this.receb = new Conta(null);
+    const current = this.authService.getCurrentUser();
+    console.log("Current: " + current);
+    if (!current) {
+      alert("Usuário não logado!");
+      route.navigateByUrl("/");
+      console.warn("Usuário não logado");
+    }
   }
 
   ngOnInit() {
@@ -22,13 +36,18 @@ export class RecebimentosComponent implements OnInit {
   }
 
   private loadDados() {
+    this.valorTotal = 0;
+    if (this.recebimentos) {
+      this.recebimentos = null;
+    }
     this.loopService.getRecebimentos().subscribe(res => {
       const rees = Object.keys(res);
       for (const recebimento of rees) {
         this.valorTotal += res[recebimento]["valor"];
         const conta: Conta = {
           nome: res[recebimento]["nome"],
-          valor: res[recebimento]["valor"]
+          valor: res[recebimento]["valor"],
+          id: res[recebimento]["id"]
         };
         if (!this.recebimentos) {
           this.recebimentos = [conta];
@@ -44,5 +63,27 @@ export class RecebimentosComponent implements OnInit {
       this.aviso = "Recebimento cadastrado com sucesso!";
       this.loadDados();
     });
+  }
+  deletar(id: String) {
+    this.loopService.deleteRecebimento(id).subscribe(res => {
+      this.aviso = "Recebimento removido com sucesso!";
+      this.loadDados();
+    });
+  }
+  editar(id: string) {
+    this.edit = id;
+  }
+  onEditSubmit(form: NgForm) {
+    const rec = new Conta(form.value);
+    rec.id = this.edit;
+    this.loopService.editRecebimento(rec).subscribe(res => {
+      this.aviso = "Item " + rec.nome + " editado com sucesso!";
+      this.edit = null;
+      this.loadDados();
+    });
+  }
+  logout() {
+    this.loopService.logoutUser();
+    this.route.navigateByUrl("/");
   }
 }

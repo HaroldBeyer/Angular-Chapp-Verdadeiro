@@ -1,10 +1,52 @@
 <h3 *ngIf="aviso">{{ aviso }}</h3>
 
-<h1>Recebimentos</h1>
+<h1>Contas a receber</h1>
 <div *ngIf="recebimentos">
   <div *ngFor="let item of recebimentos">
     <div>Nome: {{ item.nome }}</div>
     <div>Valor: {{ item.valor }}</div>
+    <div>
+      <button type="btn btn-info" (click)="editar(item.id)">Editar</button>
+      <button type="btn btn-danger" (click)="deletar(item.id)">Deletar</button>
+      <div *ngIf="edit && edit == item.id">
+        <form #form="ngForm" autocomplete="off" (submit)="onEditSubmit(form)">
+          <div class="form-group">
+            <input
+              name="nome"
+              #nome="ngModel"
+              [(ngModel)]="receb.nome"
+              class="form-control"
+              placeholder="Nome"
+              required
+            />
+            <div
+              *ngIf="nome.invalid && nome.touched"
+              class="validation-error"
+            ></div>
+          </div>
+          <div class="form-group">
+            <input
+              name="valor"
+              #telefone="ngModel"
+              [(ngModel)]="receb.valor"
+              class="form-control"
+              placeholder="Valor"
+              type="number"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <button
+              type="submit"
+              [disabled]="form.invalid"
+              class="btn btn-lg btn-block btn-info"
+            >
+              Atualizar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
   <div>Valor total: {{ valorTotal }}</div>
 </div>
@@ -13,7 +55,7 @@
   <h1>Nenhum recebimento cadastrado</h1>
 </div>
 <br /><br /><br />
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+<form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)" *ngIf="!edit">
   <div class="form-group">
     <input
       name="nome"
@@ -48,3 +90,6 @@
 </form>
 <br /><br />
 <a href="/pagamentos">Página de pagamentos</a>
+
+<br />
+<button type="btn btn-info" (click)="logout()">Logout</button>
