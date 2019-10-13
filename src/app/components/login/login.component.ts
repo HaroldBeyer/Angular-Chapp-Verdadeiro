@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     this.loopService.login(form.value).subscribe(res => {
       const oxx = Object.keys(res);
       for (const o of oxx) {
-        console.log(o + " " + res[o]);
+        console.log(o + ":" + res[o]);
       }
       this.router.navigateByUrl("/pagamentos");
     });

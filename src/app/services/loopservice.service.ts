@@ -67,4 +67,21 @@ export class LoopserviceService {
       recebimento
     );
   }
+  getPagamentos(): Observable<{}> {
+    return this.http.get("http://localhost:3000/api/pagamentos");
+  }
+  postPagamento(pagamento: Conta): Observable<any> {
+    return this.http.post("http://localhost:3000/api/pagamentos", pagamento, {
+      headers: this.headerDefault
+    });
+  }
+  deletePagamento(id: String): Observable<{}> {
+    return this.http.delete("http://localhost:3000/api/pagamentos" + "/" + id);
+  }
+  editPagamento(pagamento: Conta): Observable<any> {
+    return this.http.put(
+      "http://localhost:3000/api/pagamentos" + "/" + pagamento.id,
+      pagamento
+    );
+  }
 }

@@ -23,6 +23,7 @@ export class RecebimentosComponent implements OnInit {
   }
 
   private loadDados() {
+    this.valorTotal = 0;
     if (this.recebimentos) {
       this.recebimentos = null;
     }
