@@ -1,10 +1,44 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarCollapse"
+    aria-controls="navbarCollapse"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/signin">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/signup">Criar conta</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 <h1 *ngIf="aviso">
   {{ aviso }}
 </h1>
 
-<h1 class="display-4">Criar usuário</h1>
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+<form
+  class="form-signin"
+  #form="ngForm"
+  autocomplete="off"
+  (submit)="onSubmit(form)"
+>
   <div class="form-group">
+    <h1 class="h3 mb-3 font-weight-normal">Criar usuário</h1>
     <input
       name="email"
       #nome="ngModel"
@@ -36,4 +70,3 @@
     </button>
   </div>
 </form>
-<a href="/recebimentos">Recebimentos</a>
