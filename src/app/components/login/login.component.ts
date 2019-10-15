@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     console.log("Current: " + current);
     if (current) {
       alert("Usuário já está logado!");
-      router.navigateByUrl("/recebimentos");
+      router.navigateByUrl("/");
     }
   }
 
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       this.authService.setUser(res.user);
       const token = res.id;
       this.authService.setToken(token);
-      this.router.navigateByUrl("/pagamentos");
+      this.router.navigateByUrl("/");
     });
     console.log(form.value);
   }

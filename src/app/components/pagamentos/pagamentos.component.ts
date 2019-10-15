@@ -29,6 +29,7 @@ export class PagamentosComponent implements OnInit {
       alert("Usuário não logado!");
       route.navigateByUrl("/");
       console.warn("Usuário não logado");
+    } else {
     }
   }
 
