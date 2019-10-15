@@ -15,6 +15,10 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private loopService: LoopserviceService
   ) {
+    this.check();
+  }
+
+  private check() {
     const current = this.authService.getCurrentUser();
     console.log("Current: " + current);
     if (current) {
@@ -27,5 +31,6 @@ export class HomeComponent implements OnInit {
   logout() {
     this.loopService.logoutUser();
     this.route.navigateByUrl("/");
+    this.logado = false;
   }
 }
