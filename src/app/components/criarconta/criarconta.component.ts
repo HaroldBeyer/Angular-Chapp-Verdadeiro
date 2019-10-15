@@ -1,3 +1,5 @@
+import { Router } from "@angular/router";
+import { AuthService } from "./../../services/auth.service";
 import { Observable } from "rxjs";
 import { LoopserviceService } from "./../../services/loopservice.service";
 import { Usuario } from "./../../models/usuario";
@@ -12,7 +14,18 @@ import { NgForm } from "@angular/forms";
 export class CriarcontaComponent implements OnInit {
   usuario: Usuario;
   aviso: string;
-  constructor(private loopService: LoopserviceService) {}
+  constructor(
+    private loopService: LoopserviceService,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    const current = this.authService.getCurrentUser();
+    console.log("Current: " + current);
+    if (current) {
+      alert("Usuário já está logado!");
+      router.navigateByUrl("/recebimentos");
+    }
+  }
 
   ngOnInit() {
     this.usuario = new Usuario();

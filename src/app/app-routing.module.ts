@@ -11,7 +11,16 @@ import { CriarcontaComponent } from "./components/criarconta/criarconta.componen
 const routes: Routes = [
   {
     path: "",
-    component: HomeComponent
+    component: HomeComponent,
+    pathMatch: "full"
+  },
+  {
+    path: "signup",
+    component: CriarcontaComponent
+  },
+  {
+    path: "signin",
+    component: LoginComponent
   },
   {
     path: "recebimentos",
