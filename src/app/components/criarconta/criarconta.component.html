@@ -2,9 +2,14 @@
   {{ aviso }}
 </h1>
 
-<h1 class="display-4">Criar usuário</h1>
-<form #form="ngForm" autocomplete="off" (submit)="onSubmit(form)">
+<form
+  class="form-signin"
+  #form="ngForm"
+  autocomplete="off"
+  (submit)="onSubmit(form)"
+>
   <div class="form-group">
+    <h1 class="h3 mb-3 font-weight-normal">Criar usuário</h1>
     <input
       name="email"
       #nome="ngModel"
@@ -36,4 +41,3 @@
     </button>
   </div>
 </form>
-<a href="/recebimentos">Recebimentos</a>
