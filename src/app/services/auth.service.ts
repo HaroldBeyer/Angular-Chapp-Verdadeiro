@@ -18,9 +18,9 @@ export class AuthService {
     localStorage.setItem("currentUser", JSON.stringify(user));
   }
   getCurrentUser(): Usuario {
-    let user_string = localStorage.getItem("currentUser");
-    if (!isNullOrUndefined(user_string)) {
-      return new Usuario(user_string);
+    const userString = localStorage.getItem("currentUser");
+    if (!isNullOrUndefined(userString)) {
+      return new Usuario(userString);
     } else {
       return null;
     }
