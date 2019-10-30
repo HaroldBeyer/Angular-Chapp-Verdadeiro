@@ -73,7 +73,8 @@
               #nome="ngModel"
               [(ngModel)]="receb.nome"
               class="form-control"
-              placeholder="Nome"
+              placeholder="{{ item.nome }}"
+              value="{{ item.nome }}"
               required
             />
             <div
@@ -87,7 +88,8 @@
               #telefone="ngModel"
               [(ngModel)]="receb.valor"
               class="form-control"
-              placeholder="Valor"
+              placeholder="{{ item.valor }}"
+              value="{{ item.valor }}"
               type="number"
               required
             />

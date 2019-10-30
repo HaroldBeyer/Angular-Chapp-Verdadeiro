@@ -16,14 +16,7 @@ export class ContaComponent implements OnInit {
   receb: Conta;
   aviso: string;
   edit: string;
-  /**
-   * Informa se o path atual é recebimento ou não.
-   * OBS: Escolhi fazer desta maneira pois é mais rápido ler um booleano do que uma string
-   * tendo apenas 2 páginas possíveis utilizando este único component, mas entendo que
-   * ao fazer por uma string eu consigo deixar disponível para outras páginas que
-   * possam vir a utilizar o mesmo component.
-   */
-  path: String;
+  path: string;
 
   constructor(
     private loopService: LoopserviceService,
@@ -32,7 +25,7 @@ export class ContaComponent implements OnInit {
   ) {
     this.receb = new Conta(null);
     const current = this.authService.getCurrentUser();
-    console.log("Current: " + current);
+    // console.log("Current: " + current);
     if (!current) {
       this.redirecionar(route);
     }
@@ -60,6 +53,7 @@ export class ContaComponent implements OnInit {
 
   ngOnInit() {
     this.loadDados();
+    this.loopService.getPagamentos2().subscribe(res => {});
   }
 
   private loadDados() {
@@ -78,15 +72,9 @@ export class ContaComponent implements OnInit {
     }
   }
 
-  private getContas(res: {}) {
-    const rees = Object.keys(res);
-    for (const recebimento of rees) {
-      this.valorTotal += res[recebimento]["valor"];
-      const conta: Conta = {
-        nome: res[recebimento]["nome"],
-        valor: res[recebimento]["valor"],
-        id: res[recebimento]["id"]
-      };
+  private getContas(res: Conta[]) {
+    for (const conta of res) {
+      this.valorTotal += conta.valor;
       if (!this.contas) {
         this.contas = [conta];
       } else {

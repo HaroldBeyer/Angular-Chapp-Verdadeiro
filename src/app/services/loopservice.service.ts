@@ -3,6 +3,7 @@ import { Usuario } from "./../models/usuario";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -45,8 +46,8 @@ export class LoopserviceService {
     return null;
   }
 
-  getRecebimentos(): Observable<{}> {
-    return this.http.get(
+  getRecebimentos(): Observable<Conta[]> {
+    return this.http.get<Conta[]>(
       `http://localhost:3000/api/recebimentos?access_token=${this.accessToken}`
     );
   }
@@ -76,11 +77,12 @@ export class LoopserviceService {
       recebimento
     );
   }
-  getPagamentos(): Observable<{}> {
-    return this.http.get(
-      `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`
-    );
+  getPagamentos(): Observable<Conta[]> {
+    const url = `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`;
+    // return this.http.get(<Conta[]>url);
+    return this.http.get<Conta[]>(url);
   }
+
   postPagamento(pagamento: Conta): Observable<any> {
     return this.http.post(
       `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`,
