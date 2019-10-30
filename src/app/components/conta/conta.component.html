@@ -1,0 +1,161 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarCollapse"
+    aria-controls="navbarCollapse"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/pagamentos">Pagamentos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/recebimentos">Recebimentos</a>
+      </li>
+      <button type="button" class="btn btn-secondary" (click)="logout()">
+        Logout
+      </button>
+    </ul>
+  </div>
+</nav>
+
+<h3 *ngIf="aviso">{{ aviso }}</h3>
+<div class="align-text-bottom">
+  <br /><br />
+  <br />
+  <h1 class="mx-auto h3 mb-3 font-weight-normal" style="width: 400px;">
+    Contas de {{ path }}
+  </h1>
+</div>
+<div class="mx-auto" style="width: 400px;" *ngIf="contas">
+  <div *ngFor="let item of contas">
+    <ul class="list-group">
+      <li class="list-group-item">
+        Nome: {{ item.nome }}
+        <br />
+        Valor: {{ item.valor }}
+        <br />
+        <button type="button" class="btn btn-primary" (click)="editar(item.id)">
+          Editar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deletar(item.id)">
+          Deletar
+        </button>
+      </li>
+    </ul>
+    <div>
+      <div
+        class="mx-auto"
+        style="width: 400px;"
+        *ngIf="edit && edit == item.id"
+      >
+        <form
+          class="form-signin"
+          #form="ngForm"
+          autocomplete="off"
+          (submit)="onEditSubmit(form)"
+        >
+          <div class="form-group">
+            <input
+              name="nome"
+              #nome="ngModel"
+              [(ngModel)]="receb.nome"
+              class="form-control"
+              placeholder="Nome"
+              required
+            />
+            <div
+              *ngIf="nome.invalid && nome.touched"
+              class="validation-error"
+            ></div>
+          </div>
+          <div class="form-group">
+            <input
+              name="valor"
+              #telefone="ngModel"
+              [(ngModel)]="receb.valor"
+              class="form-control"
+              placeholder="Valor"
+              type="number"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <button
+              type="submit"
+              [disabled]="form.invalid"
+              class="btn btn-lg btn-block btn-info"
+            >
+              Atualizar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div>Valor total: {{ valorTotal }}</div>
+</div>
+
+<div *ngIf="!contas">
+  <br />
+  <h3 class="mx-auto h3 mb-3 font-weight-normal" style="width: 600px;">
+    Nenhum recebimento cadastrado!
+  </h3>
+</div>
+<br /><br /><br />
+<div class="mx-auto" style="width: 400px;">
+  <form
+    class="form-signin"
+    #form="ngForm"
+    autocomplete="off"
+    (submit)="onSubmit(form)"
+    *ngIf="!edit"
+  >
+    <div class="form-group">
+      <input
+        name="nome"
+        #nome="ngModel"
+        [(ngModel)]="receb.nome"
+        class="form-control"
+        placeholder="Nome"
+        required
+      />
+      <div *ngIf="nome.invalid && nome.touched" class="validation-error"></div>
+    </div>
+    <div class="form-group">
+      <input
+        name="valor"
+        #telefone="ngModel"
+        [(ngModel)]="receb.valor"
+        class="form-control"
+        placeholder="Valor"
+        type="number"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="btn btn-lg btn-block btn-info"
+      >
+        Cadastrar novo {{ path }}
+      </button>
+    </div>
+  </form>
+  <br /><br />
+
+  <br />
+</div>
