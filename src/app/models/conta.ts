@@ -4,10 +4,6 @@ export class Conta {
   public id: string | null;
   public data: Date | null;
 
-  /*Conta(nome: string, valor: number) {
-    this.nome = nome;
-    this.valor = valor;
-  }*/
   constructor(obj) {
     if (obj) {
       this.nome = obj.nome;
