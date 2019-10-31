@@ -2,7 +2,7 @@ export class Conta {
   public nome: string;
   public valor: number;
   public id: string | null;
-  public data: Date;
+  public data: Date | null;
 
   /*Conta(nome: string, valor: number) {
     this.nome = nome;
