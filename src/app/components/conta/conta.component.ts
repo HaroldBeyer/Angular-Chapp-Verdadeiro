@@ -88,6 +88,7 @@ export class ContaComponent implements OnInit {
     this.loopService.deleteConta(id, this.isRecebimento()).subscribe(res => {
       this.aviso = "Item " + res.nome + " removido com sucesso!";
       this.loadDados();
+      this.edit = null;
     });
   }
   editar(id: string) {
