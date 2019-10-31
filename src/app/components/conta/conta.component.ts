@@ -12,7 +12,7 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ContaComponent implements OnInit {
   contas: Conta[];
-  valorTotal = 0;
+  valorTotal: number;
   receb: Conta;
   aviso: string;
   edit: string;
@@ -53,7 +53,6 @@ export class ContaComponent implements OnInit {
 
   ngOnInit() {
     this.loadDados();
-    this.loopService.getPagamentos2().subscribe(res => {});
   }
 
   private loadDados() {
@@ -61,15 +60,9 @@ export class ContaComponent implements OnInit {
     if (this.contas) {
       this.contas = null;
     }
-    if (this.isRecebimento()) {
-      this.loopService.getRecebimentos().subscribe(res => {
-        this.getContas(res);
-      });
-    } else {
-      this.loopService.getPagamentos().subscribe(res => {
-        this.getContas(res);
-      });
-    }
+    this.loopService.getContas(this.isRecebimento()).subscribe(res => {
+      this.getContas(res);
+    });
   }
 
   private getContas(res: Conta[]) {
@@ -84,52 +77,30 @@ export class ContaComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (this.isRecebimento()) {
-      this.loopService.postRecebimento(form.value).subscribe(res => {
-        this.aviso = "Recebimento cadastrado com sucesso!";
+    this.loopService
+      .postConta(form.value, this.isRecebimento())
+      .subscribe(res => {
+        this.aviso = "Item " + res.nome + " cadastrado com sucesso!";
         this.loadDados();
       });
-    } else {
-      this.loopService.postPagamento(form.value).subscribe(res => {
-        this.aviso = "Pagamento cadastrado com sucesso!";
-        this.loadDados();
-      });
-    }
   }
   deletar(id: string) {
-    if (this.isRecebimento()) {
-      this.loopService.deleteRecebimento(id).subscribe(res => {
-        this.aviso = "Recebimento removido com sucesso!";
-        this.loadDados();
-      });
-    } else {
-      this.loopService.deletePagamento(id).subscribe(res => {
-        this.aviso = "Pagamento removido com sucesso!";
-        this.loadDados();
-      });
-    }
+    this.loopService.deleteConta(id, this.isRecebimento()).subscribe(res => {
+      this.aviso = "Item " + res.nome + " removido com sucesso!";
+      this.loadDados();
+    });
   }
   editar(id: string) {
     this.edit = id;
   }
   onEditSubmit(form: NgForm) {
-    if (this.isRecebimento()) {
-      const rec = new Conta(form.value);
-      rec.id = this.edit;
-      this.loopService.editRecebimento(rec).subscribe(res => {
-        this.aviso = "Item " + rec.nome + " editado com sucesso!";
-        this.edit = null;
-        this.loadDados();
-      });
-    } else {
-      const rec = new Conta(form.value);
-      rec.id = this.edit;
-      this.loopService.editPagamento(rec).subscribe(res => {
-        this.aviso = "Item " + rec.nome + " editado com sucesso!";
-        this.edit = null;
-        this.loadDados();
-      });
-    }
+    const sub = new Conta(form.value);
+    sub.id = this.edit;
+    this.loopService.editConta(sub, this.isRecebimento()).subscribe(res => {
+      this.aviso = "Item" + res.nome + "editado com sucesso!";
+      this.edit = null;
+      this.loadDados();
+    });
   }
   logout() {
     this.loopService.logoutUser();
@@ -137,9 +108,8 @@ export class ContaComponent implements OnInit {
   }
 
   isRecebimento(): Boolean {
-    if (this.path == "Recebimento") {
-      return true;
-    }
+    if (this.path == "Recebimento") return true;
+
     return false;
   }
 }
