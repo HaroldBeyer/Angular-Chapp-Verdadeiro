@@ -1,7 +1,8 @@
 export class Conta {
-  nome: string;
-  valor: number;
-  id: string | null;
+  public nome: string;
+  public valor: number;
+  public id: string | null;
+  public data: Date;
 
   /*Conta(nome: string, valor: number) {
     this.nome = nome;
@@ -11,6 +12,12 @@ export class Conta {
     if (obj) {
       this.nome = obj.nome;
       this.valor = obj.valor;
+      if (obj.data) {
+        this.data = obj.data;
+      }
+      if (obj.id) {
+        this.id = obj.id;
+      }
     }
   }
 }

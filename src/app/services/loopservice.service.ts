@@ -3,6 +3,7 @@ import { Usuario } from "./../models/usuario";
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -24,7 +25,7 @@ export class LoopserviceService {
         password: usuario.senha
       };
       //URL + "/Users"
-      return this.http.post("http://localhost:3000/api/Users", json, {
+      return this.http.post(this.URL + "/Users", json, {
         headers: this.headerDefault
       });
     }
@@ -45,67 +46,78 @@ export class LoopserviceService {
     return null;
   }
 
-  getRecebimentos(): Observable<{}> {
-    return this.http.get(
-      `http://localhost:3000/api/recebimentos?access_token=${this.accessToken}`
-    );
+  getContas(isRecebimento: Boolean): Observable<Conta[]> {
+    if (isRecebimento) {
+      return this.http.get<Conta[]>(
+        this.URL + `/recebimentos?access_token=${this.accessToken}`
+      );
+    } else {
+      return this.http.get<Conta[]>(
+        this.URL + `/pagamentos?access_token=${this.accessToken}`
+      );
+    }
   }
-  postRecebimento(recebimento: Conta): Observable<any> {
-    return this.http.post(
-      `http://localhost:3000/api/recebimentos?access_token=${this.accessToken}`,
-      recebimento,
-      {
-        headers: this.headerDefault
-      }
-    );
+
+  postConta(conta: Conta, isRecebimento: Boolean): Observable<Conta> {
+    if (isRecebimento) {
+      return this.http
+        .post(
+          this.URL + `/recebimentos?access_token=${this.accessToken}`,
+          conta,
+          {
+            headers: this.headerDefault
+          }
+        )
+        .pipe(map(changes => new Conta(changes)));
+    } else {
+      return this.http
+        .post(
+          this.URL + `/pagamentos?access_token=${this.accessToken}`,
+          conta,
+          {
+            headers: this.headerDefault
+          }
+        )
+        .pipe(map(changes => new Conta(changes)));
+    }
   }
-  deleteRecebimento(id: String): Observable<{}> {
-    return this.http.delete(
-      `http://localhost:3000/api/recebimentos` +
-        `/` +
-        id +
-        `?access_token=${this.accessToken}`
-    );
+  deleteConta(id: String, isRecebimento: Boolean): Observable<Conta> {
+    if (isRecebimento) {
+      return this.http
+        .delete(
+          this.URL + `/recebimentos/` + id + `?access_token=${this.accessToken}`
+        )
+        .pipe(map(changes => new Conta(changes)));
+    } else {
+      return this.http
+        .delete(
+          this.URL + `/pagamentos/` + id + `?access_token=${this.accessToken}`
+        )
+        .pipe(map(changes => new Conta(changes)));
+    }
   }
-  editRecebimento(recebimento: Conta): Observable<any> {
-    return this.http.put(
-      `http://localhost:3000/api/recebimentos` +
-        `/` +
-        recebimento.id +
-        `?access_token=${this.accessToken}`,
-      recebimento
-    );
-  }
-  getPagamentos(): Observable<{}> {
-    return this.http.get(
-      `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`
-    );
-  }
-  postPagamento(pagamento: Conta): Observable<any> {
-    return this.http.post(
-      `http://localhost:3000/api/pagamentos?access_token=${this.accessToken}`,
-      pagamento,
-      {
-        headers: this.headerDefault
-      }
-    );
-  }
-  deletePagamento(id: String): Observable<{}> {
-    return this.http.delete(
-      `http://localhost:3000/api/pagamentos` +
-        "/" +
-        id +
-        `?access_token=${this.accessToken}`
-    );
-  }
-  editPagamento(pagamento: Conta): Observable<any> {
-    return this.http.put(
-      `http://localhost:3000/api/pagamentos` +
-        "/" +
-        pagamento.id +
-        `?access_token=${this.accessToken}`,
-      pagamento
-    );
+  editConta(conta: Conta, isRecebimento: Boolean): Observable<Conta> {
+    if (isRecebimento) {
+      return this.http
+        .put(
+          this.URL +
+            `/recebimentos/` +
+            conta.id +
+            `?access_token=${this.accessToken}`,
+          conta
+        )
+        .pipe(map(changes => new Conta(changes)));
+    } else {
+      return this.http
+        .put(
+          this.URL +
+            `/pagamentos/` +
+            conta.id +
+            `?access_token=${this.accessToken}`,
+          conta
+        )
+        .pipe(map(changes => new Conta(changes)));
+    }
   }
   logoutUser() {
     const url_api = `http://localhost:3000/api/Users/logout?access_token=${this.accessToken}`;

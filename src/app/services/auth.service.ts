@@ -15,14 +15,12 @@ export class AuthService {
     return localStorage.getItem("accessToken");
   }
   setUser(user: Usuario): void {
-    let user_string = JSON.stringify(user);
-    localStorage.setItem("currentUser", user_string);
+    localStorage.setItem("currentUser", JSON.stringify(user));
   }
   getCurrentUser(): Usuario {
-    let user_string = localStorage.getItem("currentUser");
-    if (!isNullOrUndefined(user_string)) {
-      let user: Usuario = JSON.parse(user_string);
-      return user;
+    const userString = localStorage.getItem("currentUser");
+    if (!isNullOrUndefined(userString)) {
+      return new Usuario(userString);
     } else {
       return null;
     }

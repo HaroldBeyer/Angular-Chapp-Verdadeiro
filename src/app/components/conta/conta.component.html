@@ -36,16 +36,18 @@
   <br /><br />
   <br />
   <h1 class="mx-auto h3 mb-3 font-weight-normal" style="width: 400px;">
-    Contas a receber
+    Contas de {{ path }}
   </h1>
 </div>
-<div class="mx-auto" style="width: 400px;" *ngIf="recebimentos">
-  <div *ngFor="let item of recebimentos">
+<div class="mx-auto" style="width: 400px;" *ngIf="contas">
+  <div *ngFor="let item of contas">
     <ul class="list-group">
       <li class="list-group-item">
         Nome: {{ item.nome }}
         <br />
         Valor: {{ item.valor }}
+        <br />
+        Data: {{ item.data }}
         <br />
         <button type="button" class="btn btn-primary" (click)="editar(item.id)">
           Editar
@@ -73,7 +75,8 @@
               #nome="ngModel"
               [(ngModel)]="receb.nome"
               class="form-control"
-              placeholder="Nome"
+              placeholder="{{ item.nome }}"
+              value="{{ item.nome }}"
               required
             />
             <div
@@ -87,7 +90,8 @@
               #telefone="ngModel"
               [(ngModel)]="receb.valor"
               class="form-control"
-              placeholder="Valor"
+              placeholder="{{ item.valor }}"
+              value="{{ item.valor }}"
               type="number"
               required
             />
@@ -108,7 +112,7 @@
   <div>Valor total: {{ valorTotal }}</div>
 </div>
 
-<div *ngIf="!recebimentos">
+<div *ngIf="!contas">
   <br />
   <h3 class="mx-auto h3 mb-3 font-weight-normal" style="width: 600px;">
     Nenhum recebimento cadastrado!
@@ -151,7 +155,7 @@
         [disabled]="form.invalid"
         class="btn btn-lg btn-block btn-info"
       >
-        Cadastrar novo recebimento
+        Cadastrar novo {{ path }}
       </button>
     </div>
   </form>
