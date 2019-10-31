@@ -77,12 +77,12 @@ export class ContaComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    this.loopService
-      .postConta(form.value, this.isRecebimento())
-      .subscribe(res => {
-        this.aviso = "Item " + res.nome + " cadastrado com sucesso!";
-        this.loadDados();
-      });
+    const conta: Conta = new Conta(form.value);
+    conta.data = new Date();
+    this.loopService.postConta(conta, this.isRecebimento()).subscribe(res => {
+      this.aviso = "Item " + res.nome + " cadastrado com sucesso!";
+      this.loadDados();
+    });
   }
   deletar(id: string) {
     this.loopService.deleteConta(id, this.isRecebimento()).subscribe(res => {
@@ -96,6 +96,7 @@ export class ContaComponent implements OnInit {
   onEditSubmit(form: NgForm) {
     const sub = new Conta(form.value);
     sub.id = this.edit;
+    sub.data = new Date();
     this.loopService.editConta(sub, this.isRecebimento()).subscribe(res => {
       this.aviso = "Item" + res.nome + "editado com sucesso!";
       this.edit = null;
